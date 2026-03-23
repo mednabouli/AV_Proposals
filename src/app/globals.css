@@ -88,10 +88,20 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html, body {
+    @apply overflow-x-hidden;
+  }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground leading-relaxed md:leading-7;
   }
   html {
     @apply font-sans scroll-smooth;
+  }
+  /* Prevent iOS zoom on inputs */
+  input, textarea, select {
+    @apply text-[16px] md:text-sm;
+  }
+  button, a {
+    @apply cursor-pointer touch-manipulation;
   }
 }

@@ -1,30 +1,14 @@
 import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
-import { ensureProfile } from "@/lib/auth/ensure-profile";
 import { EmptyProposalsState } from "@/components/empty-states";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dashboard — AVProposal.ai",
-  description: "Créez et gérez vos propositions AV.",
+  title: "Historique — AVProposal.ai",
+  description: "Historique de vos propositions AV.",
 };
 
-export default async function DashboardPage() {
-  // Ensure profile exists on first visit
-  const { userId } = await auth();
-  if (!userId) {
-    redirect("/sign-in");
-  }
-
-  const profile = await ensureProfile();
-  
-  // Redirect to onboarding if not completed
-  if (profile && !profile.is_onboarded) {
-    redirect("/app/onboarding");
-  }
-
+export default function HistoryPage() {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -47,8 +31,7 @@ export default async function DashboardPage() {
         <nav className="flex flex-col gap-1 p-3">
           <Link
             href="/app"
-            aria-current="page"
-            className="flex min-h-[44px] items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors duration-200 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             id="sidebar-home"
           >
             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -69,7 +52,8 @@ export default async function DashboardPage() {
           </Link>
           <Link
             href="/app/history"
-            className="flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors duration-200 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            aria-current="page"
+            className="flex min-h-[44px] items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             id="sidebar-history"
           >
             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -97,7 +81,7 @@ export default async function DashboardPage() {
       <div className="flex flex-1 flex-col">
         {/* Top bar */}
         <header className="flex h-16 items-center justify-between border-b border-border/50 px-6">
-          <h1 className="text-lg font-semibold">Dashboard</h1>
+          <h1 className="text-lg font-semibold">Historique des devis</h1>
           <UserButton
             appearance={{
               elements: {
@@ -107,8 +91,9 @@ export default async function DashboardPage() {
           />
         </header>
 
-        {/* Empty state */}
+        {/* Content */}
         <div className="flex flex-1 items-center justify-center p-8">
+          {/* For now we show empty state */}
           <EmptyProposalsState />
         </div>
       </div>
