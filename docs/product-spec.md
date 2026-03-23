@@ -182,7 +182,59 @@ Flow B — Utilisateur régulier, upgrade Pro
 
 ---
 
-## 10. Décisions prises
+## 10. Billing & Plans (v0)
+
+### Free Plan (Forever Free)
+- **Price**: $0 CAD
+- **Monthly generation limit**: 5 proposals/month
+- **Features**:
+  - Basic proposal generation
+  - Copier/coller output
+  - No PDF export
+- **Target**: Solo freelancers testing the tool, low-volume users
+- **Max monthly usage**: 5 proposals
+
+### Pro Plan
+- **Price**: $39 CAD/month (billed monthly)
+- **Monthly generation limit**: Unlimited
+- **Features**:
+  - Unlimited proposal generation
+  - PDF export (branded, professional)
+  - Priority support (future)
+  - Custom templates (future v0.5)
+- **Target**: Active freelancers, small agencies with 10+ proposals/month
+- **Stripe setup**:
+  - Product ID: `prod_avproposal_pro`
+  - Price ID: `price_avproposal_pro_monthly` (CAD)
+  - Monthly recurring
+
+### Usage tracking
+- Generations counted per calendar month (UTC).
+- Free plan: 5 soft limit (warning at 4/5, hard block at 5/5).
+- Pro plan: No limit enforced.
+- Rate limiting: 10 per hour per user (all plans, to prevent abuse).
+
+### Upgrade flow
+1. User on Free plan hits generation limit.
+2. See: "You've reached 5 proposals this month. Upgrade to Pro for unlimited."
+3. Button: "Go to Billing" → `/app/billing`
+4. On `/app/billing`:
+   - Current plan display
+   - Pro plan card with "Upgrade now" button
+   - Stripe Checkout link
+5. After Stripe Checkout success → webhook updates DB, redirect to dashboard
+6. Dashboard shows "Plan: Pro" badge.
+
+### Stripe Integration
+- Webhook endpoint: `POST /api/webhooks/stripe`
+- Events to handle:
+  - `checkout.session.completed` → Create/update `user_subscriptions`
+  - `customer.subscription.updated` → Update subscription status
+  - `customer.subscription.deleted` → Mark subscription as "canceled"
+
+---
+
+## 11. Décisions prises
 
 | Question | Décision |
 |---|---|
@@ -195,6 +247,6 @@ Flow B — Utilisateur régulier, upgrade Pro
 
 ---
 
-## 11. Status
+## 12. Status
 
 ✅ **Product spec approuvée** — prêt pour Stage 1 (Foundation).
