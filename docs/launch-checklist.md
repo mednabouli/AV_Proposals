@@ -1,13 +1,22 @@
 # AVProposal.ai — Launch Checklist (v0 Beta)
 
-Objectif:
-- Vérifier que toute la chaîne (auth → génération → billing → analytics → domaine)
-  fonctionne avant d’inviter les 2–3 premiers freelances en bêta.
+**Last updated**: March 23, 2026  
+**Status**: ✅ Production-ready for beta launch  
+**Target**: Private beta with 3-5 freelance testers
 
-Status convention:
-- [ ] Not done
-- [~] In progress
-- [x] Done
+---
+
+### Quick Status Summary
+- [x] Build: Production-ready (npm run build passes)
+- [x] Deployment: GitHub + Vercel configured
+- [x] Domain: DNS propagated & HTTPS enabled  
+- [x] Auth: Clerk + Supabase profiles working
+- [x] Core feature: AI proposal generation + limits enforced
+- [x] Billing: Stripe checkout + webhooks + plan limits
+- [x] Emails: Resend welcome + first proposal + upgrade
+- [x] Analytics: PostHog event tracking integrated
+- [x] Errors: Sentry with data scrubbing configured
+- [x] Database: All tables exist with RLS policies
 
 ---
 
