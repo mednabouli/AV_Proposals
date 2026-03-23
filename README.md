@@ -1,45 +1,91 @@
-# AVProposal.ai
+<div align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=a78bfa&height=250&section=header&text=AVProposal.ai&fontSize=70&fontAlignY=35&desc=Intelligent%20proposal%20generator&descAlignY=55&descAlign=50" alt="AVProposal Banner">
 
-AI-powered proposal generator for AV & video freelancers/agencies in Montréal, Québec.
+  <h3>Transform a messy client brief into a clean, priced proposal in < 10 minutes.</h3>
+  <p>Engineered for AV & video freelancers and agencies in Montréal, Québec.</p>
 
-Turn a messy client brief (email, notes, RFP) into a clean, priced, French/English proposal in < 10 minutes.
+  <p align="center">
+    <a href="https://avproposal.ai"><strong>View Live Demo</strong></a>
+    ·
+    <a href="https://github.com/mednabouli/AV_Proposals/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/mednabouli/AV_Proposals/issues">Request Feature</a>
+  </p>
+</div>
 
-## Stack
+<div align="center">
+  <img src="https://img.shields.io/badge/Next.js-16.2-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/Clerk-6C47FF?style=for-the-badge&logo=clerk&logoColor=white" alt="Clerk" />
+  <img src="https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white" alt="Stripe" />
+  <img src="https://img.shields.io/badge/Anthropic-CE6147?style=for-the-badge&logo=anthropic&logoColor=white" alt="Anthropic" />
+</div>
 
-| Service | Purpose |
-|---|---|
-| Next.js + TypeScript | Frontend & API routes |
-| Tailwind + shadcn/ui | Styling & components |
-| Supabase | Database, storage, RLS |
-| Clerk | Auth (sign-in, sign-up) |
-| Stripe | Payments & subscriptions |
-| Anthropic (Claude) | AI proposal generation |
-| Pinecone | Vector DB (templates, snippets) |
-| Upstash Redis | Rate limiting |
-| Resend | Transactional emails |
-| PostHog | Product analytics |
-| Sentry | Error tracking |
-| Vercel | Hosting (preview + prod) |
-| Cloudflare | DNS / proxy |
-| Namecheap | Domain |
+---
 
-## Dev Commands
+<br />
+
+## ⚡ About The Project
+
+**AVProposal.ai** is an intelligent AI-powered business tool aimed at streamlining the proposal creation process. You feed it a chaotic email, rough notes, or an RFP from a client, and the engine handles the heavy lifting—drafting a professional, bilingual (French/English) statement of work with line-item pricing and equipment breakdowns.
+
+## 📸 Screenshots & Live Data
+
+<div align="center">
+  <!-- Replace the placeholder URL with your actual 16:9 Hero/Dashboard Screenshot -->
+  <img src="https://via.placeholder.com/800x450/1a1a2e/a78bfa?text=Landing+Page+&amp;+Hero+Section" alt="Product Screenshot 1" width="100%">
+  
+  <br/><br/>
+  
+  <!-- Replace the placeholder URLs below with vertical / mobile or specific UI states -->
+  <p float="left">
+    <img src="https://via.placeholder.com/390x400/1a1a2e/a78bfa?text=Quote+Builder" alt="Product Screenshot 2" width="49%">
+    <img src="https://via.placeholder.com/390x400/1a1a2e/a78bfa?text=Stripe+Payments" alt="Product Screenshot 3" width="49%">
+  </p>
+</div>
+
+*(Replace the placeholder URLs above with real screenshots of your application!)*
+
+<br />
+
+## 🛠️ Tech Stack & Services
+
+| Technology | Purpose |
+| ---------- | ------- |
+| **Next.js + TypeScript** | Frontend UI & API Routes |
+| **Tailwind + shadcn/ui** | Styling & accessible component system |
+| **Supabase** | PostgreSQL Database, Storage & RLS |
+| **Clerk** | Authentication & User Management |
+| **Stripe** | Subscriptions & Webhook Payments |
+| **Anthropic (Claude)** | Natural language proposal generation |
+| **Pinecone** | Vector DB for snippets and context |
+| **Upstash Redis** | Rate limiting rules |
+| **Resend** | Transactional emails |
+| **PostHog** | Product analytics & tracking |
+
+<br />
+
+## 🚀 Getting Started
+
+Follow these steps to set up the project locally on your machine.
+
+### Prerequisites & Installation
 
 ```bash
-# Install dependencies
+# Clone the repository
+git clone https://github.com/mednabouli/AV_Proposals.git
+
+# Install NPM packages
 npm install
 
-# Start dev server
+# Start the development server
 npm run dev
-
-# Production build
-npm run build
-
-# Lint
-npm run lint
 ```
 
-## Environment Variables
+### Environment Variables
 
 Copy `.env.example` to `.env.local`:
 
@@ -47,166 +93,54 @@ Copy `.env.example` to `.env.local`:
 cp .env.example .env.local
 ```
 
-### Required for local dev (minimum)
+Below are the **bare minimum** required variables to launch the app locally:
 
-| Variable | Source |
+| Variable | Description |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | [Supabase Dashboard](https://supabase.com) → Project Settings → API |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Same location |
-| `SUPABASE_SERVICE_ROLE_KEY` | Same location (keep secret!) |
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | [Clerk Dashboard](https://clerk.com) → API Keys |
-| `CLERK_SECRET_KEY` | Same location |
-| `ANTHROPIC_API_KEY` | [Anthropic Console](https://console.anthropic.com) |
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase Project API URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public Anon Key for Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | Secret Role Key (Server-side only) |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Your Clerk Publishable Key |
+| `CLERK_SECRET_KEY` | Secret Key for Clerk Auth |
+| `ANTHROPIC_API_KEY` | API Key for Claude model generation |
 
-### Required for billing
+*(For full functionality including billing, webhooks, and analytics, you must also provide keys for Stripe, Pinecone, Upstash, Resend, and PostHog).*
 
-| Variable | Source |
-|---|---|
-| `STRIPE_SECRET_KEY` | [Stripe Dashboard](https://stripe.com) → Developers → API Keys |
-| `STRIPE_WEBHOOK_SECRET` | Stripe CLI or Dashboard → Webhooks |
-| `NEXT_PUBLIC_STRIPE_PRICE_ID_PRO` | Stripe → Products → Price ID |
+<br />
 
-### Required for full features
+## 📂 Project Structure
 
-| Variable | Source |
-|---|---|
-| `PINECONE_API_KEY` | [Pinecone Console](https://app.pinecone.io) |
-| `UPSTASH_REDIS_REST_URL` | [Upstash Console](https://console.upstash.com) |
-| `RESEND_API_KEY` | [Resend Dashboard](https://resend.com) |
-| `NEXT_PUBLIC_POSTHOG_KEY` | [PostHog](https://posthog.com) → Settings |
-| `SENTRY_DSN` | [Sentry](https://sentry.io) → Project Settings |
-
-## Project Structure
-
-```
+```text
 src/
 ├── app/
-│   ├── layout.tsx          # Root layout (fonts, metadata)
-│   ├── page.tsx            # Landing page
-│   ├── pricing/page.tsx    # Pricing page
-│   └── app/page.tsx        # Dashboard (protected)
+│   ├── layout.tsx          # Root layout (fonts, metadata, providers)
+│   ├── page.tsx            # Public landing page
+│   ├── pricing/            # Public pricing page
+│   └── app/                # Protected dashboard space
 ├── components/
-│   ├── navbar.tsx          # Global navbar
-│   ├── footer.tsx          # Global footer
-│   └── ui/                 # shadcn/ui components
+│   ├── navbar.tsx          # Main Top Navbar
+│   ├── footer.tsx          # Main Footer
+│   └── ui/                 # Reusable shadcn/ui components
 └── lib/
-    └── utils.ts            # Utility functions
+    └── utils.ts            # Utility functions (e.g. cn for Tailwind merge)
 ```
 
-## Deployment
+<br />
 
-### Step 1: Push to GitHub
+## 🌎 Deployment
 
-```bash
-# Initialize git repo (if not already done)
-git init
-git add .
-git commit -m "Initial commit: AVProposal.ai"
+The repository is configured to easily deploy to **Vercel** with a seamless CI/CD pipeline.
 
-# Create a new repo on GitHub.com and add remote
-git remote add origin https://github.com/YOUR_USERNAME/av-proposals.git
-git branch -M main
-git push -u origin main
-```
+1. **Connect Vercel:** Import your GitHub repo in your Vercel dashboard.
+2. **Environment Variables:** Provide all API keys listed in `.env.local` inside the Vercel project settings.
+3. **Domain Setup (Optional):** Define custom nameservers on Namecheap/Cloudflare and generate a CNAME record connecting `avproposal.ai` to `cname.vercel-dns.com`.
+4. **Authorized Redirects:** Ensure your custom domain is whitelisted in:
+   - Clerk Dashboard (Settings → Authorized Domains)
+   - Stripe Dashboard (Webhooks & Checkout Redirect URLs)
 
-### Step 2: Deploy to Vercel
+---
 
-1. Go to [vercel.com](https://vercel.com) and sign in / sign up
-2. Click **"New Project"** → **"Import Git Repository"**
-3. Select the `av-proposals` repo from GitHub
-4. **Configure project**:
-   - **Framework**: Next.js
-   - **Root Directory**: `./` (default)
-   - Build command: `npm run build` (auto-detected)
-5. **Add environment variables** (copy from `.env.local`):
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-   - `CLERK_SECRET_KEY`
-   - `ANTHROPIC_API_KEY`
-   - `STRIPE_SECRET_KEY`
-   - `STRIPE_WEBHOOK_SECRET`
-   - `NEXT_PUBLIC_STRIPE_PRICE_ID_PRO`
-   - `PINECONE_API_KEY`
-   - `UPSTASH_REDIS_REST_URL`
-   - `UPSTASH_REDIS_REST_TOKEN`
-   - `RESEND_API_KEY`
-   - `FROM_EMAIL`
-   - `NEXT_PUBLIC_POSTHOG_API_KEY`
-   - `NEXT_PUBLIC_POSTHOG_API_HOST`
-   - `NEXT_PUBLIC_SENTRY_DSN`
-6. Click **"Deploy"** → Wait for build to complete
-7. You'll get a preview URL: `https://av-proposals.vercel.app`
-
-### Step 3: Configure Domain & Cloudflare
-
-#### Option A: Buy domain on Namecheap
-
-1. Go to [namecheap.com](https://namecheap.com)
-2. Search and buy domain (e.g., `avproposal.ai`)
-3. In Namecheap, go to **Domain List** → Your domain → **DNS Settings**
-4. Change nameservers to Cloudflare (see below)
-
-#### Option B: Add domain to Cloudflare
-
-1. Go to [cloudflare.com](https://cloudflare.com) and sign in / create account
-2. Click **"Add Site"** → Enter your domain (e.g., `avproposal.ai`)
-3. Select **Free** plan
-4. Cloudflare gives you 2 nameservers:
-   - `ns1.cloudflare.com`
-   - `ns2.cloudflare.com`
-5. Update Namecheap **Nameserver 1-2** to these Cloudflare nameservers
-6. Wait 24h for DNS propagation
-
-#### Connect Vercel to domain
-
-1. In Vercel project settings → **Domains**
-2. Add domain: `avproposal.ai` and `www.avproposal.ai`
-3. Vercel shows CNAME records to add
-4. In Cloudflare dashboard → **DNS** → Add CNAME records:
-   - Name: `www` → Value: `cname.vercel-dns.com`
-   - (Or follow Vercel's exact instructions)
-5. Wait for DNS to resolve (5 min - 24h)
-
-#### Enable HTTPS in Cloudflare
-
-1. **Cloudflare dashboard** → **SSL/TLS** → Set to **Full (Strict)**
-2. This enables automatic HTTPS via Vercel's SSL
-
-### Step 4: Update Clerk & Stripe URLs
-
-After domain is live, update redirect URIs in each service:
-
-**Clerk** (clerk.com → Settings → Authorized Domains):
-
-- Add: `https://avproposal.ai`
-- Add: `https://www.avproposal.ai`
-
-**Stripe** (stripe.com → Settings → Redirect URLs):
-
-- Add: `https://avproposal.ai/app/billing`
-- Add: `https://www.avproposal.ai/app/billing`
-
-**Stripe Webhook Endpoint** (stripe.com → Webhooks):
-
-- Endpoint URL: `https://avproposal.ai/api/webhooks/stripe`
-- Events: `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`
-
-### Step 5: Production Checklist
-
-- [ ] Build passes: `npm run build`
-- [ ] Env vars set in Vercel
-- [ ] GitHub repo created & main branch protected
-- [ ] Domain configured & DNS resolves
-- [ ] Clerk URLs updated
-- [ ] Stripe URLs updated
-- [ ] Test sign-up flow on production domain
-- [ ] Test proposal generation
-- [ ] Test Stripe checkout
-- [ ] Monitor Sentry for errors
-- [ ] Check PostHog events firing
-
-## License
-
-Private — All rights reserved.
+<div align="center">
+  <p>Built with ❤️ for the video production community.</p>
+  <p>Private — All rights reserved.</p>
+</div>
