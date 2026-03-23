@@ -2,6 +2,10 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getUserPlan } from "@/app/actions/billing";
 
+// This route uses Clerk auth() which calls headers()
+// Must be dynamic - cannot be prerendered statically
+export const dynamic = "force-dynamic";
+
 export default async function BillingPage() {
   const plan = await getUserPlan();
 
