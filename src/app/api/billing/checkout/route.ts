@@ -3,7 +3,18 @@ import { createClient } from "@/lib/supabase/server";
 import Stripe from "stripe";
 import { NextResponse } from "next/server";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
+let stripeInstance: Stripe | null = null;
+
+function getStripe(): Stripe {
+  if (!stripeInstance) {
+    const apiKey = process.env.STRIPE_SECRET_KEY;
+    if (!apiKey) {
+      throw new Error("STRIPE_SECRET_KEY is not set");
+    }
+    stripeInstance = new Stripe(apiKey);
+  }
+  return stripeInstance;
+}
 
 /**
  * POST /api/billing/checkout
@@ -50,6 +61,7 @@ export async function POST() {
       customerId = (subscription as Record<string, string>).stripe_customer_id;
     } else {
       // Create new customer
+      const stripe = getStripe();
       const customer = await stripe.customers.create({
         email: userId + "@clerk.avproposal.ai", // Placeholder
         metadata: {
@@ -70,6 +82,7 @@ export async function POST() {
     }
 
     // Create checkout session
+    const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ["card"],

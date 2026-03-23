@@ -54,6 +54,57 @@ export async function generateProposal(
       };
     }
 
+    // Check plan limits
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: subscription } = await (supabase as any)
+      .from("user_subscriptions")
+      .select("plan_id, status")
+      .eq("profile_id", profileId)
+      .single();
+
+    if (!subscription) {
+      return { error: "Abonnement non trouvé" };
+    }
+
+    // Get plan details
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: plan } = await (supabase as any)
+      .from("billing_plans")
+      .select("name, max_generations_per_month")
+      .eq("id", (subscription as Record<string, string>).plan_id)
+      .single();
+
+    if (!plan) {
+      return { error: "Plan non trouvé" };
+    }
+
+    const planName = (plan as Record<string, string>).name;
+    const maxGenerations = (plan as Record<string, number>).max_generations_per_month;
+
+    // If Free plan, check monthly usage
+    if (planName === "Free" && maxGenerations > 0) {
+      // Get current month's generation count
+      const now = new Date();
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { count: generationCount } = await (supabase as any)
+        .from("proposals")
+        .select("id", { count: "exact" })
+        .eq("owner_profile_id", profileId)
+        .neq("generated_content", null)
+        .gte("created_at", monthStart.toISOString())
+        .lte("created_at", monthEnd.toISOString());
+
+      if (generationCount !== null && generationCount >= maxGenerations) {
+        return {
+          error: `Vous avez atteint votre limite de ${maxGenerations} générations pour ce mois. Passer à Pro pour générations illimitées.`,
+          proposal: undefined,
+        };
+      }
+    }
+
     // Get the proposal from DB
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: proposal, error: proposalError } = await (supabase as any)
