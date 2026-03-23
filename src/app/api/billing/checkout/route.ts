@@ -82,8 +82,8 @@ export async function POST() {
     }
 
     // Create checkout session
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.create({
+    const stripeForSession = getStripe();
+    const session = await stripeForSession.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ["card"],
       mode: "subscription",

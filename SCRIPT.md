@@ -203,7 +203,6 @@ STAGE 6 — DEPLOYMENT & DOMAIN
 Task 6.1 — GitHub + Vercel (DEV_AGENT)
 - Ensure project builds locally.
 - Prepare instructions to:
-  - Create GitHub repo.
   - Connect to Vercel.
   - Set env vars on Vercel.
 

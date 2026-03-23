@@ -1,6 +1,8 @@
 import { createAdminClient } from "@/lib/supabase/server";
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
+import { trackPlanUpgraded } from "@/lib/analytics/posthog";
+import { sendPlanUpgradeEmail } from "@/lib/email/resend";
 
 let stripeInstance: Stripe | null = null;
 
@@ -100,6 +102,39 @@ export async function POST(req: NextRequest) {
               plan_id: (proPlan as Record<string, string>).id,
               status: "active",
             });
+        }
+
+        // Track plan upgrade and send email
+        try {
+          // Get profile with email for tracking
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const { data: profile } = await (supabase as any)
+            .from("profiles")
+            .select("clerk_user_id, email, name")
+            .eq("id", profileId)
+            .single();
+
+          if (profile) {
+            // Track upgrade
+            await trackPlanUpgraded(
+              (profile as Record<string, string>).clerk_user_id,
+              "Pro"
+            );
+
+            // Send upgrade email
+            if ((profile as Record<string, string>).email) {
+              try {
+                await sendPlanUpgradeEmail(
+                  (profile as Record<string, string>).email,
+                  (profile as Record<string, string>).name || "User"
+                );
+              } catch (emailError) {
+                console.error("Failed to send upgrade email:", emailError);
+              }
+            }
+          }
+        } catch (trackingError) {
+          console.error("Failed to track plan upgrade:", trackingError);
         }
         break;
       }

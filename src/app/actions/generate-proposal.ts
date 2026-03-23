@@ -6,6 +6,7 @@ import { getAnthropicClient } from "@/lib/ai/client";
 import { getSystemPrompt, buildProposalPrompt, type GeneratedProposal } from "@/lib/ai/prompts";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { queryTemplatesForProposal } from "@/lib/ai/pinecone";
+import { trackProposalGenerated, trackFirstProposalGenerated } from "@/lib/analytics/posthog";
 
 interface GenerateProposalInput {
   proposalId: string;
@@ -188,6 +189,43 @@ export async function generateProposal(
     if (updateError || !updated) {
       console.error("Update error:", updateError);
       return { error: "Erreur lors de la sauvegarde du devis généré" };
+    }
+
+    // Track proposal generation
+    try {
+      const projectType = (proposal as Record<string, string>).project_type;
+      
+      // Check if this is the first proposal
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { count: totalProposals } = await (supabase as any)
+        .from("proposals")
+        .select("id", { count: "exact" })
+        .eq("owner_profile_id", profileId)
+        .neq("generated_content", null);
+
+      const isFirstProposal = (totalProposals || 0) === 1;
+
+      if (isFirstProposal) {
+        await trackFirstProposalGenerated(userId, input.proposalId, projectType);
+        
+        // Send first proposal email
+        try {
+          const { sendFirstProposalEmail } = await import("@/lib/email/resend");
+          if ((profile as Record<string, string>).email) {
+            await sendFirstProposalEmail(
+              (profile as Record<string, string>).email,
+              (profile as Record<string, string>).name || "User",
+              input.proposalId
+            );
+          }
+        } catch (emailError) {
+          console.error("Failed to send first proposal email:", emailError);
+        }
+      } else {
+        await trackProposalGenerated(userId, projectType);
+      }
+    } catch (trackingError) {
+      console.error("Failed to track proposal generation:", trackingError);
     }
 
     return {

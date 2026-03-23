@@ -3,6 +3,8 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import type { Profile } from "@/lib/supabase/types";
+import { sendWelcomeEmail } from "@/lib/email/resend";
+import { trackUserSignUp } from "@/lib/analytics/posthog";
 
 /**
  * Ensure a Supabase profile exists for the current Clerk user.
@@ -63,6 +65,28 @@ export async function ensureProfile(): Promise<Profile | null> {
       plan_id: (freePlan as Record<string, string>).id,
       status: "active",
     });
+
+    // Send welcome email
+    if (user.emailAddresses?.[0]?.emailAddress) {
+      try {
+        await sendWelcomeEmail(
+          user.emailAddresses[0].emailAddress,
+          (newProfile as Record<string, string>).name || "User"
+        );
+      } catch (error) {
+        console.error("Failed to send welcome email:", error);
+      }
+    }
+
+    // Track user signup
+    try {
+      await trackUserSignUp(
+        userId,
+        user.emailAddresses?.[0]?.emailAddress || userId
+      );
+    } catch (error) {
+      console.error("Failed to track user signup:", error);
+    }
   }
 
   return newProfile;
