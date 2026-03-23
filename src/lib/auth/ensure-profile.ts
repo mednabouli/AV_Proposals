@@ -28,7 +28,8 @@ export async function ensureProfile(): Promise<Profile | null> {
   const user = await currentUser();
   if (!user) return null;
 
-  const { data: newProfile, error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: newProfile, error } = await (supabase as any)
     .from("profiles")
     .insert({
       clerk_user_id: userId,
@@ -48,16 +49,18 @@ export async function ensureProfile(): Promise<Profile | null> {
   }
 
   // Assign Free plan by default
-  const { data: freePlan } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: freePlan } = await (supabase as any)
     .from("billing_plans")
     .select("id")
     .eq("name", "Free")
     .single();
 
   if (freePlan && newProfile) {
-    await supabase.from("user_subscriptions").insert({
-      profile_id: newProfile.id,
-      plan_id: freePlan.id,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase as any).from("user_subscriptions").insert({
+      profile_id: (newProfile as Record<string, string>).id,
+      plan_id: (freePlan as Record<string, string>).id,
       status: "active",
     });
   }

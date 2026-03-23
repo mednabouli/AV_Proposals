@@ -76,7 +76,6 @@ export default async function DashboardPage() {
         <header className="flex h-16 items-center justify-between border-b border-border/50 px-6">
           <h1 className="text-lg font-semibold">Dashboard</h1>
           <UserButton
-            afterSignOutUrl="/"
             appearance={{
               elements: {
                 avatarBox: "h-8 w-8",

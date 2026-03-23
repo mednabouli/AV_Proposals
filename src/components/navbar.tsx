@@ -1,7 +1,10 @@
 import Link from "next/link";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
+import { UserButton } from "@clerk/nextjs";
 
-export function Navbar() {
+export async function Navbar() {
+  const user = await currentUser();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -40,32 +43,35 @@ export function Navbar() {
 
         {/* Auth buttons */}
         <div className="flex items-center gap-3">
-          <SignedOut>
-            <Link
-              href="/sign-in"
-              className="hidden rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
-              id="nav-login"
-            >
-              Connexion
-            </Link>
-            <Link
-              href="/sign-up"
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/40 hover:shadow-xl"
-              id="nav-signup"
-            >
-              Commencer gratuitement
-            </Link>
-          </SignedOut>
-          <SignedIn>
-            <Link
-              href="/app"
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/40 hover:shadow-xl"
-              id="nav-dashboard"
-            >
-              Dashboard
-            </Link>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
+          {!user ? (
+            <>
+              <Link
+                href="/sign-in"
+                className="hidden rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+                id="nav-login"
+              >
+                Connexion
+              </Link>
+              <Link
+                href="/sign-up"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/40 hover:shadow-xl"
+                id="nav-signup"
+              >
+                Commencer gratuitement
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/app"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-primary/40 hover:shadow-xl"
+                id="nav-dashboard"
+              >
+                Dashboard
+              </Link>
+              <UserButton />
+            </>
+          )}
         </div>
       </div>
     </header>
