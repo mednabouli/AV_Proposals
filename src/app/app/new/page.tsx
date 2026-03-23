@@ -37,13 +37,40 @@ export default function NewProposalPage() {
       ...prev,
       [name]: value,
     }));
-    setError(null);
+    // Clear error when user starts typing
+    if (error) {
+      setError(null);
+    }
+  };
+
+  const validateForm = (): string | null => {
+    if (!formData.client_name.trim()) {
+      return "Le nom du client est requis";
+    }
+    if (!formData.project_type) {
+      return "Veuillez sélectionner un type de projet";
+    }
+    if (!formData.budget.trim()) {
+      return "Le budget est requis";
+    }
+    if (!formData.raw_brief.trim()) {
+      return "La description du projet est requise";
+    }
+    return null;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    // Validate form before submitting
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      setLoading(false);
+      return;
+    }
 
     try {
       const result = await createProposal(formData);

@@ -16,6 +16,7 @@ export default function OnboardingPage() {
   const [language, setLanguage] = useState<"fr" | "en">("fr");
   const [dailyRate, setDailyRate] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const serviceOptions = [
     { id: "promo_video", label: "Vidéo promotionnelle", label_en: "Promotional Video" },
@@ -36,6 +37,8 @@ export default function OnboardingPage() {
     if (!userType || services.length === 0) return;
 
     setLoading(true);
+    setError(null);
+
     try {
       const response = await fetch("/api/onboarding/complete", {
         method: "POST",
@@ -48,12 +51,17 @@ export default function OnboardingPage() {
         }),
       });
 
-      if (response.ok) {
-        router.push("/app");
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.error || "Une erreur est survenue lors de l'enregistrement");
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      console.error("Onboarding error:", error);
-    } finally {
+
+      router.push("/app");
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Une erreur est survenue";
+      setError(`Erreur: ${errorMessage}`);
       setLoading(false);
     }
   };
@@ -71,7 +79,12 @@ export default function OnboardingPage() {
           <p className="text-slate-300">Quelques questions pour bien vous connaître</p>
         </div>
 
-        {/* Progress */}
+        {/* Error Alert */}
+        {error && (
+          <div className="mb-8 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
+            <p className="text-red-300 text-sm">{error}</p>
+          </div>
+        )}
         <div className="flex justify-between mb-8">
           {[1, 2, 3].map((stepNum) => (
             <div
