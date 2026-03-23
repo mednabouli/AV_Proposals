@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
 import { ensureProfile } from "@/lib/auth/ensure-profile";
+import { EmptyProposalsState } from "@/components/empty-states";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,8 +14,15 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   // Ensure profile exists on first visit
   const { userId } = await auth();
-  if (userId) {
-    await ensureProfile();
+  if (!userId) {
+    redirect("/sign-in");
+  }
+
+  const profile = await ensureProfile();
+  
+  // Redirect to onboarding if not completed
+  if (profile && !profile.is_onboarded) {
+    redirect("/app/onboarding");
   }
 
   return (
@@ -86,28 +95,7 @@ export default async function DashboardPage() {
 
         {/* Empty state */}
         <div className="flex flex-1 items-center justify-center p-8">
-          <div className="mx-auto max-w-md text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                <polyline points="14,2 14,8 20,8" />
-                <line x1="12" y1="12" x2="12" y2="18" />
-                <line x1="9" y1="15" x2="15" y2="15" />
-              </svg>
-            </div>
-            <h2 className="text-xl font-semibold">
-              Créer ton premier devis en 3 minutes
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Colle ton brief client, remplis quelques champs, et obtiens une proposition professionnelle prête à envoyer.
-            </p>
-            <button
-              className="mt-6 inline-flex h-11 items-center justify-center rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5"
-              id="empty-state-cta"
-            >
-              + Nouveau devis
-            </button>
-          </div>
+          <EmptyProposalsState />
         </div>
       </div>
     </div>

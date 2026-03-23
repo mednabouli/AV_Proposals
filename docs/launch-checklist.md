@@ -17,6 +17,68 @@
 - [x] Analytics: PostHog event tracking integrated
 - [x] Errors: Sentry with data scrubbing configured
 - [x] Database: All tables exist with RLS policies
+- [x] Onboarding: 3-step wizard (user type, services, language/rate)
+- [x] Empty states: Dashboard shows when no proposals yet
+- [x] Copy: FR/EN complete in `docs/copy-guide.md`
+
+---
+
+## Pre-Launch QA (Must Pass All)
+
+### Onboarding Flow
+- [ ] New user is redirected to `/app/onboarding` after sign-up
+- [ ] All 3 steps display correctly (user type, services, lang/rate)
+- [ ] Form validation prevents incomplete submissions
+- [ ] On completion → redirects to dashboard (not onboarding again)
+- [ ] Profile is updated with onboarded data in Supabase
+
+### Dashboard
+- [ ] Empty state appears when no proposals (no crash)
+- [ ] "Créer mon premier devis" button links to `/app/new`
+- [ ] Sidebar navigation works (New, History, Templates)
+- [ ] Logout via UserButton works
+- [ ] Mobile responsive (test on phone)
+
+### Proposal Creation & Generation
+- [ ] All form fields accept input (no JS errors in console)
+- [ ] Validation shows helpful error messages
+- [ ] Generation button triggers AI call (check console for Anthropic call)
+- [ ] Loading spinner appears during generation
+- [ ] On success → displays generated proposal with pricing table
+- [ ] Generated content is readable & makes sense
+
+### Billing Enforcement
+- [ ] Create 5 proposals as Free user
+- [ ] 6th proposal attempt → shows paywall with upgrade CTA
+- [ ] Click upgrade → Stripe checkout loads
+- [ ] After checkout → dashboard accessible again
+- [ ] Check Stripe Dashboard → customer + subscription created
+
+### Emails
+- [ ] Welcome email arrives within 1 min of signup
+- [ ] Check email subject lines (FR formatting correct)
+- [ ] Click links in emails → they work and go to right place
+- [ ] Check spam folder (shouldn't be there)
+
+### Analytics & Monitoring
+- [ ] PostHog dashboard shows events (wait 5 min for sync)
+- [ ] Sentry dashboard has no critical errors
+- [ ] Vercel deployment logs show no 5xx errors
+- [ ] Response times < 2s for pages, < 10s for generation
+
+### Copy & UX
+- [ ] All visible text uses copy from `docs/copy-guide.md`
+- [ ] French labels are grammatically correct (no "Êtes" typos)
+- [ ] English labels sound natural (not machine-translated)
+- [ ] Dark theme colors contrast properly (readability OK)
+- [ ] No placeholder text visible (no "Lorem ipsum")
+
+### Security
+- [ ] No API keys exposed in client code (check Network tab)
+- [ ] `.env` not in git (check git history)
+- [ ] `/app` routes require authentication
+- [ ] Stripe webhook secret validated correctly
+- [ ] Sentry scrubs sensitive data (no emails in errors)
 
 ---
 
