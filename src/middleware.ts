@@ -4,6 +4,11 @@ const isProtectedRoute = createRouteMatcher([
   "/app(.*)",
 ]);
 
+/**
+ * Middleware that runs in Vercel Edge Runtime
+ * Keep this as lightweight as possible - no SDK initialization here
+ * SDKs like Sentry are initialized in instrumentation.ts instead
+ */
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
     await auth.protect();
